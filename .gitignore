@@ -37,3 +37,4 @@
 
 assets/*
 !assets/images/
+docs/.*
