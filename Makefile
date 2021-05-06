@@ -4,6 +4,9 @@ bachelor:
 	xelatex bachelor.tex
 	xelatex bachelor.tex
 
+	find . -name '*.aux' -print0 | xargs -0 rm -rf
+	rm -rf *.lof *.log *.lot *.out *.toc *.bbl *.blg *.thm
+
 clean:
 	find . -name '*.aux' -print0 | xargs -0 rm -rf
 	rm -rf *.lof *.log *.lot *.out *.toc *.bbl *.blg *.thm
