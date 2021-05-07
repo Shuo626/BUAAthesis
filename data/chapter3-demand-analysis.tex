@@ -1,85 +1,23 @@
 % !Mode:: "TeX:UTF-8"
-\chapter{下载}
+\chapter{需求分析}
 
-\section{发行版本}
+为了使得本平台更加通用，本篇论文分别对目前深度学习开发语言，深度学习开发流程，模型的部署流程，模型在具体硬件的使用情况，模型需要的优化程度，以及类型功能的软件的设计进行了充分的调研。基于以上充分的调研后，对本平台进行了需求的分析，本平台的需求分析遵从以下的逻辑。用户需求，主要根据用户在日常使用遇到的困难来分析用户想要做什么。产品需求，基于用户的需求来分析产品需要实现怎样的功能，达到怎样的效果来满足用户的需求。产品功能需求，也是和产品的实现联系在一起的，基于产品的需求，同时结合用户的一些主流开发语言，开发流程等因素，决定产品需要实现哪些功能，如产品需要使用哪种语言进行实现，产品需要能够支持哪些框架和哪些设备，产品最终的实现形式等。
 
-发行版本是本模板编写者会不定期更新打包的版本，适合大部分用户使用，
-优点是相对较为稳定，下载和使用都更方便便捷，
-缺点是可能不包含一些最新的更新，不过应该足够满足常规毕业设计论文撰写需求。
-由于本模板仍在开发之中，我们将适时更新本说明文档及相关项目介绍和使用方法，
-敬请关注后续进展。
 
-\section{开发版本}
+\section{用户需求}
 
-开发版本是通过Git直接clone本模板托管在Github版本库中的最新代码，
-适合有版本管理工具使用经验和对LaTeX使用较为熟练的用户。
-优点是包含最新的模板代码，
-缺点是稳定性无法保证，可能有一些小问题，
-当然我们很欢迎您通过所有可能的方式将问题反馈给我们。
+在深度学习具体的应用场景中，训练好的神经网络模型往往需要在具体的设备上执行，如服务器，移动手机，嵌入式设备等等。就导致了用户训练模型和执行模型的设备的架构不同。所以，用户面临的问题就是需要把训练好的模型部署到不同的设备上，在部署过程中还需要针对目标设备的架构进行模型的调整和优化。 所以，用户希望能够简化模型部署的流程，同时保证模型的准确率。
 
-\subsection{下载方法}
-首先你需要打开准备存放毕业设计论文的目录，
-通过命令\ref{code-git-clone}即可获取最新的模板代码，
-需要注意的是这将在当前目录下新建一个名为BUAAthesis的文件夹。
-\begin{lstlisting}[
-    language={bash},
-    caption={git clone},
-    label={code-git-clone},
-]
-git clone git://github.com/BHOSC/BUAAthesis.git
-\end{lstlisting}
 
-\subsection{更新方法}
-通过命令\ref{code-git-pull}即可实现模板代码的更新，
-需要注意的是此处可能会出现冲突，相关处理方法将在后续说明。
-\begin{lstlisting}[
-    language={bash},
-    caption={git pull},
-    label={code-git-pull},
-]
-git pull origin master
-\end{lstlisting}
+\section{产品需求}
 
-\section{目录结构}
+为了满足用户的需求，产品需要实现一个平台来帮助用户进行模型的部署。考虑到目前的神经网络模型多采用Python进行开发，所以本平台应该要以Python库的形式进行实现，方便用户在其项目中进行使用。其次，平台应该有应用的广泛性，即平台应该能够支持目前主流的深度学习框架，同时应该支持部署到主流的硬件设备上。最后，平台要保证易用性，保证用户简单，容易的部署模型。
 
-本模板项目完整的文件目录结构如下所示：
 
-{
-    \dirtree{%
-        .1 BUAAthesis/\DTcomment{根目录}.
-        .2 buaathesis.cls\DTcomment{模板文件}.
-        .2 buaathesis.bst\DTcomment{参考文献样式}.
-        .2 sample-bachelor.tex\DTcomment{本科生示例文件}.
-        .2 data/\DTcomment{数据文件夹}.
-        .3 abstract.tex\DTcomment{中英文摘要}.
-        .3 appendix1-faq.tex\DTcomment{附录1，常见问题}.
-        .3 appendix2-contactus.tex\DTcomment{附录2，联系我们}.
-        .3 bibs.bib\DTcomment{参考文献文件}.
-        .3 chapter1-intro.tex.
-        .3 chapter2-config.tex.
-        .3 chapter3-download.tex.
-        .3 chapter4-baisc.tex.
-        .3 chapter5-usage.tex.
-        .3 chapter6-implement.tex.
-        .3 com\_info.tex\DTcomment{通用自定义信息}.
-        .3 reference.tex\DTcomment{参考文献}.
-        .3 bachelor/\DTcomment{本科生专属文件}.
-        .4 assign.tex\DTcomment{任务书}.
-        .4 bachelor\_info.tex\DTcomment{本科生专属信息}.
-        .4 acknowledgement.tex\DTcomment{致谢页}.
-        .3 master/\DTcomment{研究生专属文件}.
-        .4 back1-achievement.tex\DTcomment{附页1，取得成绩}.
-        .4 back2-acknowledgement.tex\DTcomment{附页2，致谢}.
-        .4 back3-aboutauthor.tex\DTcomment{附页3，关于作者}.
-        .4 denotation.tex\DTcomment{主要符号对照表}.
-        .4 master\_info.tex\DTcomment{研究生专属信息}.
-        .2 figure/\DTcomment{图片存放路径}.
-        .3 buaamark.eps\DTcomment{北航Logo，用于页眉}.
-        .3 buaaname.eps\DTcomment{北航校名，用于首页}.
-        .3 fgbt.jpg\DTcomment{北航未来花园Logo，用于测试}.
-        .2 Makefile\DTcomment{Linux下辅助脚本}.
-        .2 msmake.bat\DTcomment{Windows下辅助脚本}.
-        .2 README.md\DTcomment{Github项目说明}.
-        .2 .gitignore\DTcomment{Git版本管理配置文件}.
-    }
-}
+\section{产品功能需求}
+
+首先， 平台应该实现为Python的库，同时实现模型部署的API，实现的API要保证统一，简洁，方便用户调用。
+
+其次，平台需要支持Pytorch，Tensorflow，Keras，Onnx等深度学习框架。以及服务器，移动手机，FPGA等硬件设备。
+
+最后，平台要能够对模型进行面向计算图和硬件架构的优化，保证部署模型的准确率。
