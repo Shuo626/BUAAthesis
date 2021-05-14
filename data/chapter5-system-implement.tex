@@ -23,7 +23,7 @@
     \begin{tabular}{c|c|c}
     \hline
                                  & 软件             & 版本          \\ \hline
-    驱动                          & Nidia Driver   & 460.39      \\ \hline
+    驱动                          & Nvidia Driver   & 460.39      \\ \hline
     \multirow{3}{*}{GPU计算库}      & Cuda           & 11.1        \\ \cline{2-3} 
                                  & Cudnn          & 8.0.5       \\ \cline{2-3} 
                                  & OpenCL         & 2.2         \\ \hline
@@ -46,7 +46,7 @@
     \end{tabular}
 \end{table}
 
-对于Nidia Driver和Cuda和Cudnn，从Nidia的官网下载下载器进行安装，在安装显卡驱动前，要在BIOS中关闭安全启动的选项。同时要关闭nvidia-drm模块，具体的安装命令如下：
+对于Nvidia Driver和Cuda和Cudnn，从Nvidia的官网下载下载器进行安装，在安装显卡驱动前，要在BIOS中关闭安全启动的选项。同时要关闭nvidia-drm模块，具体的安装命令如下：
 
 \begin{lstlisting}[
     language={},
@@ -65,18 +65,18 @@ sudo systemctl start graphical.target
 
 对于GCC，CMake，Make，Maven，Gradle等构建工具使用Ubuntu的包管理器进行安装，使用命令sudo apt install <package>进行安装。
 
-对于Android SDK等软件，使用Android的sdkmanager进行安装，使用命令sdkmanager --list来查看可安装的包，使用sdkmanager --install <package>来安装所需的软件包。
+对于Android SDK等软件，使用Android的sdkmanager进行安装，使用命令sdkmanager \-\-list来查看可安装的包，使用sdkmanager \-\-install <package>来安装所需的软件包。
 
 对于深度学习框架，使用Python的包管理器pip进行安装，使用命令pip install <package>进行安装。
 
 
-\subsection{软件版本管理}
+\subsection{软件配置}
 
-安装软件后，平台还需要采用合理的方式对软件及其版本进行管理，同时需要设置一些环境变量来保证软件的正常使用。
+安装软件后，平台还需要对软件进行一些配置，如设置一些环境变量来保证软件的正常使用以及多个版本共存的问题。
 
-对于Cuda来说，把Cuda的文件放在系统的/usr/local/cuda/cuda-version目录下，不同的Cuda版本放在不同的cuda-version目录下，同时设置一个链接文件current指向当前使用的版本，可以方便的进行版本的管理，同时设置CUDA\_HOME=/usr/local/cuda/current环境变量，同时需要把Cuda的库文件目录加入LD\_LIBRARY\_PATH环境变量中，保证连接器ld能够找到Cuda的动态连接库，把Cuda的可执行文件目录加入PATH环境变量中。
+对于Cuda Toolkit来说，把Cuda Toolkit的文件放在系统的/usr/local/cuda/cuda-version目录下，不同的Cuda Toolkit版本放在不同的cuda-version目录下，同时设置一个链接文件current指向当前使用的版本，可以方便的进行版本的管理，同时设置CUDA\_HOME=/usr/local/cuda/current环境变量，同时需要把Cuda Toolkit的库文件目录加入LD\_LIBRARY\_PATH环境变量中，保证连接器ld能够找到Cuda Toolkit的动态连接库，把Cuda Toolkit的可执行文件目录加入PATH环境变量中。
 
-对于JDK来说，采用和Cuda相同的管理方法，把不同的JDK版本放在/usr/local/jdk/jdk-version目录下，设置链接文件指向当前使用的版本。同时需要指定环境变量JAVA\_HOME=/usr/local/jdk/current，同时把JDK的可执行文件目录加入PATH环境变量中。
+对于JDK来说，采用和Cuda Toolkit相同的管理方法，把不同的JDK版本放在/usr/local/jdk/jdk-version目录下，设置链接文件指向当前使用的版本。同时需要指定环境变量JAVA\_HOME=/usr/local/jdk/current，同时把JDK的可执行文件目录加入PATH环境变量中。
 
 对于Android SDK来说，需要指定环境变量ANDROID\_SDK\_ROOT=/usr/local/android-sdk。使用sdkmanager安装的ndk，build-tools，platform-tools，cmdline-tools，emulator等软件包会安装到这个目录下。
 
@@ -161,8 +161,6 @@ ADD_C_INCLUDES = /usr/include/CL
 
 第四，使用命令gradle clean build来构建该App。
 
-最后，使用adb install <apk>来安装此App到Android设备上，安装后的应用如下图\ref{android_rpc_app}所示。
-
 \begin{figure}[h!]
     \centering
     \includegraphics[width=180.bp]{figure/android_app.png}
@@ -170,13 +168,15 @@ ADD_C_INCLUDES = /usr/include/CL
     \label{android_rpc_app}
 \end{figure}
 
+最后，使用adb install <apk>来安装此App到Android设备上，安装后的应用如下图\ref{android_rpc_app}所示。
+
 
 \subsection{构建VTA模拟器}
 该部分介绍VTA模拟器的编译环境，编译步骤以及VTA的配置参数。
 
 \subsubsection{编译环境}
 
-VTA模拟器的编译环境，采用64位Ubuntu系统，intel i5 10210U CPU，Nidia MX250 GPU。依赖的Cuda版本为11.1，Cudnn版本为8.0.5，LLVM版本为10。编译工具GCC版本为9.3.0，CMake版本为3.16.3，Make版本为4.2.0。
+VTA模拟器的编译环境，采用64位Ubuntu系统，intel i5 10210U CPU，Nvidia MX250 GPU。依赖的Cuda版本为11.1，Cudnn版本为8.0.5，LLVM版本为10。编译工具GCC版本为9.3.0，CMake版本为3.16.3，Make版本为4.2.0。
 
 \subsubsection{编译流程}
 
@@ -252,7 +252,7 @@ VTA作为一个可自定义的深度学习加速器，可以通过修改一些�
 下面以compile\_pytorch函数为例，展示函数内部的编译的具体细节。
 
 \begin{lstlisting}[
-    language={python},
+    language={Python},
     caption={compile\_pytorch函数},
     label={compile_pytorch}
 ]
@@ -283,7 +283,7 @@ def compile_pytorch(model: torch.nn.Module, input_shape: list, kwargs):
 TVM把得到的计算图的中间表示和参数部署到本地需要指定部署的target\_host和target，target\_host用来指定在CPU端执行的代码，一般为llvm，target用来指定具体的计算平台，在本地可以使用CPU计算或者GPU计算，所以target可以为llvm或cuda。下面为具体的代码\ref{deploy_local}：
 
 \begin{lstlisting}[
-    language={python},
+    language={Python},
     caption={部署到本地},
     label={deploy_local}
 ]
@@ -308,7 +308,7 @@ tvm_output = m.get_output(0)
 部署到安卓与部署到本地不同，部署到安卓，需要让本地电脑能够与安卓设备进行通信，能够把得到的动态链接库上传到安卓设备，让动态链接库在安卓设备上执行。采用Rpc来使本地电脑和安卓进行通信，首先在本地，使用命令python -m tvm.exec.rpc\_tracker --host=<host> --port=<port>来创建一个Rpc的服务端。在安卓设备上，使用前文构建安装的App，输入指定的ip和端口，这样就可以使安卓设备和本地进行通信。使用TVM部署到安卓，同样需要指定target\_host和target，target\_host是在安卓端的CPU执行的代码，通常为llvm，target是安卓端的计算平台，可以是CPU，OpenCL和Vlukan。其次，在创建可以在安卓端执行的动态链接库时，因为安卓端的架构和本地不同，所以不能使用本地的编译器，需要使用TVM的ndk工具进行编译，然后将此上传到安卓端，下面是具体的代码\ref{deploy_android}：
 
 \begin{lstlisting}[
-    language={python},
+    language={Python},
     caption={部署到安卓},
     label={deploy_android}
 ]
@@ -343,12 +343,12 @@ out = module.get_output(0)
 树莓派是基于Linux的单片机，处理器采用ARM架构。与部署在安卓设备相同，同样需要使用RPC与树莓派设备进行通信，在本地使用TVM编译出可执行代码后，使用RPC把可执行代码上传到树莓派设备，然后在树莓派设备上进行运行，具体的代码如下\ref{deploy_rasp}：
 
 \begin{lstlisting}[
-    language={python},
+    language={Python},
     caption={部署到树莓派},
     label={deploy_rasp}
 ]
 with tvm.transform.PassContext(opt_level=3):
-    lib = relay.build(func, tvm.target.arm_cpu('rasp3b), params=params)
+    lib = relay.build(func, tvm.target.arm_cpu('rasp3b'), params=params)
 
 remote = rpc.conncet(host, port)
 lib_fname = lib.export_library('net.tar')
@@ -367,10 +367,10 @@ print("TVM prediction top-1: {}".format(synset[top1]))
 
 \subsubsection{部署到VTA}
 
-通过TVM编译处VTA指令集的可执行代码，得到可执行代码后，在本地的VTA模拟器执行该代码。与部署到其他设备不同的是，VTA的选项中，只支持输入和权重的向量为8位，所以在生成代码之前还需要对模型进行量化，具体的代码如下\ref{deploy_vta}：
+通过TVM编译出VTA指令集的可执行代码，得到可执行代码后，在本地的VTA模拟器执行该代码。与部署到其他设备不同的是，VTA的选项中，只支持输入和权重的向量为8位，所以在生成代码之前还需要对模型进行量化，具体的代码如下\ref{deploy_vta}：
 
 \begin{lstlisting}[
-    language={python},
+    language={Python},
     caption={部署到VTA},
     label={deploy_vta}
 ]
@@ -396,7 +396,7 @@ with vta.build_config(opt_level=3, disabled_pass={"AlterOpLayout"}):
 
 \section{接口实现}
 
-对于平台的接口实现来说，通过一个基类BaseTVMHelper来表示共通的编译部署流程，对于每种具体的设备，通过继承该基类来实现一个针对具体设备的编译部署流程，对于本平台支持的4种设备，共实现如下4哥类：
+对于平台的接口实现来说，通过一个基类BaseTVMHelper来表示共通的编译部署流程，对于每种具体的设备，通过继承该基类来实现一个针对具体设备的编译部署流程，对于本平台支持的4种设备，共实现如下4个类：
 \begin{itemize}
     \item {LocalTVMHelper}
     \item {AndroidTVMHelper}
@@ -441,7 +441,7 @@ with vta.build_config(opt_level=3, disabled_pass={"AlterOpLayout"}):
 下面通过调用本接口来把Pytorch模型部署到本地来展示接口的具体使用：
 
 \begin{lstlisting}[
-    language={python},
+    language={Python},
     caption={本地接口使用},
     label={use_interface_local}
 ]
@@ -452,22 +452,22 @@ import numpy as np
 from PlatfromTVM import LocalTVMHelper
 
 # 获得模型
-model = getattr(torchvision.models, ‘resnet18’)(pretrained=True)
+model = getattr(torchvision.models, 'resnet18')(pretrained=True)
 
 # 部署到local设备，使用CPU计算
-deployed_model = LocalTVMHelper(device=’local’,frame=’pytorch’
-   model=model,input_shape=[1,3,224,224],opt_level=3,target=’cpu’)
+deployed_model = LocalTVMHelper(device='local', frame='pytorch'
+   model=model, input_shape=[1,3,224,224], opt_level=3,target='cpu')
 # 通过部署的模型计算
 out = deployed_model(input)
 \end{lstlisting}
 
-下图\ref{compare}是使用该平台和不是该平台把模型部署到安卓设备上的代码对比，左侧是使用该平台，右侧是不使用该平台：
+下图\ref{compare}是使用该平台和不使用该平台把模型部署到安卓设备上的代码对比，左侧是使用该平台，右侧是不使用该平台：
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[]{figure/compare.png}
+    \includegraphics[width=180bp]{figure/compare.png}
     \caption{代码对比}
     \label{compare}
 \end{figure}
 
-可以看到，使用该平台大大简化了模型编译部署的难度，同时使用户不需要了解使用TVM编译部署的具体细节以及是使用Rpc通信的具体细节。
+可以看到，使用该平台大大简化了模型编译部署的难度，同时使用户不需要了解使用TVM编译部署的具体细节以及使用Rpc通信的具体细节。
