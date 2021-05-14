@@ -8,7 +8,7 @@
 
 \subsection{测试环境}
 
-模型部署的本地电脑采用的是64位的Ubuntu系统，使用intel i5 10210U CPU，Nidia MX250 GPU。
+模型部署的本地电脑采用的是64位的Ubuntu系统，使用intel i5 10210U CPU，Nvidia MX250 GPU。
 
 
 \subsection{测试流程}
@@ -28,23 +28,23 @@
     \label{expr_local}
 \end{figure}
 
-如上图\ref{expr_local}所示，可以看到，部署到本地的模型在CPU和GPU上分别执行100次推理时,GPU只需要1.28s而CPU需要5.49s。
+如上图\ref{expr_local}所示，可以看到，部署到本地的模型在CPU和GPU上分别执行100次推理时，GPU只需要1.28秒而CPU需要5.49秒。
 
 
 \section{部署安卓测试}
 
-部署到Android的实验来验证本地主机与Andorid设备的通信是否正常，同时验证该平台部署到Android设备的功能的正确性。该实验分别把模型部署到Android端的CPU，OpenCL，Vulkan计算平台上，验证每种计算平台执行推理的时间。
+部署到安卓的实验来验证本地主机与按住设备的通信是否正常，同时验证该平台部署到安卓设备的功能的正确性。该实验分别把模型部署到安卓端的CPU，OpenCL，Vulkan计算平台上，验证每种计算平台执行推理的时间。
 
 \subsection{测试环境}
 
-本实验的本地端采用64位Ubuntu系统，使用intel i5 10210U CPU，Nidia MX250 GPU。Android端是使用android11系统，使用MTK Helio G90T CPU，ARM Mali G76 MC4 GPU。
+本实验的本地端采用64位Ubuntu系统，使用intel i5 10210U CPU，Nvidia MX250 GPU。安卓端是使用android11系统，使用MTK Helio G90T CPU，ARM Mali G76 MC4 GPU。
 
 
 \subsection{测试流程}
 
 首先，使用torchvision库获得预训练的resnet18模型。
 
-其次，使用平台的接口把模型部署到Android设备上，同时在Android端使用前文构建的App，输入指定的ip，port，key来打开Rpc通信。同时可以使用命令python -m tvm.exec.query\_rpc\_tracker --host=host --port=port来检验Android设备是否连接到了本地电脑。
+其次，使用平台的接口把模型部署到安卓设备上，同时在安卓端使用前文构建的App，输入指定的ip，port，key来打开Rpc通信。同时可以使用命令python -m tvm.exec.query\_rpc\_tracker --host=host --port=port来检验安卓设备是否连接到了本地电脑。
 
 最后，分别使用CPU，OpenCL，Vulkan执行推理，记录执行时间。
 
@@ -58,16 +58,16 @@
     \label{expr_android}
 \end{figure}
 
-如上图\ref{expr_android}所示，虽然在Android设备上使用了GPU，但是反而比CPU慢，因为TVM没有针对该GPU的优化，所以导致了执行速度下降明显。
+如上图\ref{expr_android}所示，虽然在安卓设备上使用了GPU，但是反而比CPU慢，因为TVM没有针对该GPU的优化，所以导致了执行速度下降明显。
 
 
 \section{部署树莓派测试}
 
-部署到树莓派的测试主要验证平台是否能够正常的部署到树莓派设备上，因为树莓派设备上只有CPU处理器，所以该部分的测试只测试功能的正确行。
+部署到树莓派的测试主要验证平台是否能够正常的部署到树莓派设备上，因为树莓派设备上只有CPU处理器，所以该部分的测试只测试功能的正确性。
 
 \subsection{测试环境}
 
-模型编译参用的本地环境为64位Ubuntu系统，使用intel i5 10210U CPU，Nidia MX250 GPU。模型执行的树莓派采用的是ARM架构的CPU。
+模型编译采用的本地环境为64位Ubuntu系统，使用intel i5 10210U CPU，Nvidia MX250 GPU。模型执行的树莓派采用的是ARM架构的CPU。
 
 
 \subsection{测试流程}
@@ -104,14 +104,14 @@
 
 \subsection{测试环境}
 
-模型编译参用的本地环境为64位Ubuntu系统，使用intel i5 10210U CPU，Nidia MX250 GPU。VTA模拟器采用的参数配置如下：
+模型编译参用的本地环境为64位Ubuntu系统，使用intel i5 10210U CPU，Nvidia MX250 GPU。VTA模拟器采用的参数配置如下：
 \begin{itemize}
     \item {TARGET：sim。}
     \item {LOG\_INP\_WIDTH：3。}
     \item {LOG\_WGT\_WIDTH：3。}
     \item {LOG\_ACC\_WIDTH：5。}
-    \item {LOG\_BATCH：VTA矩阵乘法元语中输入输出向量的维度0。本论文中使用0。}
-    \item {LOG\_BLOCK：VTA矩阵乘法元语中输入输出向量的维度1。本论文中使用4。}
+    \item {LOG\_BATCH：0。}
+    \item {LOG\_BLOCK：4。}
     \item {LOG\_UOP\_BUFF\_SIZE：5。}
     \item {LOG\_INP\_BUFF\_SIZE：15。}
     \item {LOG\_WGT\_BUFF\_SIZE：18。}
