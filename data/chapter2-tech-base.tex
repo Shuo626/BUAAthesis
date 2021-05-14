@@ -9,7 +9,7 @@
 下面的代码\ref{pytorch_model}具体定义一个模型来展示该模型生成的计算图。
 
 \begin{lstlisting}[
-    language={Python},
+    language={python},
     caption={Pytorch模型},
     label={pytorch_model},
 ]
@@ -37,7 +37,7 @@ class Model(torch.nn.Module):
 该模型仅由一个卷积和一个全连接层组成，输入向量的维度为(1, 3, 5, 5)，输出向量的维度为(1, 10)，可以通过下面的代码\ref{pytorch_scripted_model}来获得该模型的计算图。
 
 \begin{lstlisting}[
-    language={Python},
+    language={python},
     caption={Pytorch计算图},
     label={pytorch_scripted_model}
 ]
@@ -60,14 +60,14 @@ graph(%self.1 : __torch__.Model,
   %2 : __torch__.torch.nn.modules.linear.Linear = prim::GetAttr[name="fc"](%self.1)
   %3 : __torch__.torch.nn.modules.conv.Conv2d = prim::GetAttr[name="conv"](%self.1)
   %4 : Tensor = prim::CallMethod[name="forward"](%3, %input.1)
-  %5 : int = prim::Constant[value=1]() # /home/shuo/work/learn/learn-tvm/prac.py:13:0
-  %6 : int = prim::Constant[value=-1]() # /home/shuo/work/learn/learn-tvm/prac.py:13:0
-  %input : Float(1, 90, strides=[90, 1], requires_grad=1, device=cpu) = aten::flatten(%4, %5, %6) # /home/shuo/work/learn/learn-tvm/prac.py:13:0
+  %5 : int = prim::Constant[value=1]()
+  %6 : int = prim::Constant[value=-1]()
+  %input : Float(1, 90, strides=[90, 1], requires_grad=1, device=cpu) = aten::flatten(%4, %5, %6)
   %8 : Tensor = prim::CallMethod[name="forward"](%2, %input)
   return (%8)
 \end{lstlisting}
 
-该计算图的没一行是计算图中的一个节点，其中从左到右依次是节点变量，变量类型，以及该节点的操作（Operation）。
+该计算图的每一行是计算图中的一个节点，其中从左到右依次是节点变量，变量类型，以及该节点的操作（Operation）。
 
 
 \section{RPC}
@@ -112,7 +112,7 @@ TVM是一个端到端的神经网络模型的编译器工具链，支持目前�
     \label{tvm_compile}
 \end{figure}
 
-TVM的整体编译流程如上图\ref{tvm_compile}所示，首先TVM的前端导入深度学习框架的模型，在这一过程中，TVM通过预先设定的Operation的映射，把不同深度学习框架计算图的Operation转换为统一的操作，得到IR（Intermediate Representation），中间表示。同时对IR进行一些优化，如常数合并，死代码消除，向量维度转化等。这些优化大多和具体的硬件架构无关。以模型\ref{pytorch_model}为例，其计算图为\ref{scripted_model_out}，在经过TVM前端的编译后得到的计算图如下\ref{relay_function}。
+TVM的整体编译流程如上图\ref{tvm_compile}所示，首先TVM的前端导入深度学习框架的模型，在这一过程中，TVM通过预先设定的算子（Operation）的映射，把不同深度学习框架计算图的算子转换为统一的算子，得到IR（Intermediate Representation），中间表示。同时对中间表示进行一些优化，如常数合并，死代码消除，向量维度转化等。这些优化大多和具体的硬件架构无关。以模型\ref{pytorch_model}为例，其计算图为\ref{scripted_model_out}，在经过TVM前端的编译后得到的计算图如下\ref{relay_function}。
 
 \begin{lstlisting}[
     language={},
@@ -131,9 +131,9 @@ fn (%input0: Tensor[(1, 3, 5, 5), float32], %conv.weight: Tensor[(10, 3, 3, 3), 
 }
 \end{lstlisting}
 
-在得到高层次的IR后，TVM会把高层次的IR转换为底层次的IR，并对低层次的IR进行一些优化，其中的优化分为两种，一种是确定的基于规则的优化，另一种是采用机器学习的方法搜索出更优的优化方案。这些优化大多是和具体的硬件架构相关的。其中，确定的优化包括多维数组的寻址展开为一维的数组寻址，把Operation展开为具体硬件相关的元语等。但是，不同的硬件在支持的元语和内存架构等方面都有所不同，所以很难通过确定的优化方案对每种硬件都有很好的支持，为了支持更多的硬件和更好的效率，TVM采用了基于搜索和学习的优化方案。TVM首先定义了一些调度的元语，例如循环转化（Loop Transformations），代码内连（Inline），向量化（Vectorization）等。TVM在一定的搜索空间内搜索出效率更好的调度方案。
+在得到高层次的中间表示后，TVM会把高层次的中间表示转换为底层次的中间表示，并对低层次的中间表示进行一些优化，其中的优化分为两种，一种是确定的基于规则的优化，另一种是采用机器学习的方法搜索出更优的优化方案。这些优化大多是和具体的硬件架构相关的。其中，确定的优化包括多维数组的寻址展开为一维的数组寻址，把算子展开为具体硬件相关的元语等。但是，不同的硬件在支持的元语和内存架构等方面都有所不同，所以很难通过确定的优化方案对每种硬件都有很好的支持，为了支持更多的硬件和更好的效率，TVM采用了基于搜索和学习的优化方案。TVM首先定义了一些调度的元语，例如循环转化（Loop Transformations），代码内连（Inline），向量化（Vectorization）等。TVM在一定的搜索空间内搜索出效率更好的调度方案。
 
-在对低层次IR进行优化后，TVM针对具体的硬件进行代码的生成。TVM通过调用一些其他的编译器，如LLVM来生成一些CPU可执行的代码，同时也可以生成一些Cuda和OpenCL的源代码。最后TVM提供了一个轻量化的运行库（Runitme）来调用和执行生成的代码。
+在对低层次中间表示进行优化后，TVM针对具体的硬件进行代码的生成。TVM通过调用一些其他的编译器，如LLVM来生成一些CPU可执行的代码，同时也可以生成一些Cuda和OpenCL的源代码。最后TVM提供了一个轻量化的运行库（Runitme）来调用和执行生成的代码。
 
 
 \section{VTA}
@@ -156,6 +156,6 @@ VTA具有以下特点：
     \label{vta}
 \end{figure}
 
-如上图\ref{vta}所示，VTA整体分为四个模块，获取模块（Fetch Module），加载模块（Load Module），计算模块（Compute Module），储存模块（Store Module）。这些模块通过一些队列来进行通信。其中，Fetch Module负责从内存中获得指令序列，并对指令进行解码，把解码后的指令分别储存进其他三个模块队列（LOAD CMD Q，COMPUTE CMD Q，STORE CMD Q）中。Load Module负责从内存中读取输入和权重向量并储存到VTA的INPUT BUFFER（输入缓存）和WEIGHT BUFFER（权重缓存）中。Compute Module负责通过它的GEMM Core（General Matrix Multiply）核心来进行一些矩阵的运算和通过其Tensor ALU来进行一些向量的计算，同时还负责从内存中读取一些数据储存到REGISTER FILE（向量寄存器）以及负责从内存中读取一些Micro-Op（微指令）储存到MICRO-OP CACHE（微指令缓存）中。Store Module负责把计算的结果储存回内存中。
+如上图\ref{vta}所示，VTA整体分为四个模块，获取模块（Fetch Module），加载模块（Load Module），计算模块（Compute Module），储存模块（Store Module）。这些模块通过一些队列来进行通信。其中，获取模块负责从内存中获得指令序列，并对指令进行解码，把解码后的指令分别储存进其他三个模块队列（LOAD CMD Q，COMPUTE CMD Q，STORE CMD Q）中。加载模块负责从内存中读取输入和权重向量并储存到VTA的INPUT BUFFER（输入缓存）和WEIGHT BUFFER（权重缓存）中。计算模块负责通过它的GEMM Core（General Matrix Multiply）核心来进行一些矩阵的运算和通过其Tensor ALU来进行一些向量的计算，同时还负责从内存中读取一些数据储存到REGISTER FILE（向量寄存器）以及负责从内存中读取一些Micro-Op（微指令）储存到MICRO-OP CACHE（微指令缓存）中。储存模块负责把计算的结果储存回内存中。
 
 VTA的指令集，ISA（Instruction Set Architecture），分为四类，LOAD，GEMM，ALU，STORE。LOAD指令负责从内存中读取一个2维的向量并把向量储存在INPUT BUFFER，WEIGHT BUFFER或REGISTER FILE中。GEMM指令可以执行一些Micro-Op，对输入矩阵和权重矩阵进行运算，并把结果储存在REGISTER FILE中。ALU指令执行一些矩阵与矩阵之间的一些操作。STORE指令负责把输出的向量储存回内存当中。
